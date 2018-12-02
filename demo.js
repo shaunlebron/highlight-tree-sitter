@@ -1,6 +1,6 @@
 const Parser = require('tree-sitter');
 const Clojure = require('tree-sitter-clojure');
-const { highlightTree, printHighlightTree, printHighlightHtml } = require('./index.js');
+const { partialSexp, fullSexp, printSexp, printHtml } = require('./index.js');
 
 const parser = new Parser();
 parser.setLanguage(Clojure);
@@ -24,11 +24,14 @@ const ast = parser.parse(code);
 console.log(ast.rootNode.toString());
 
 console.log("======================================================================");
-console.log("HST:");
-const hst = highlightTree(code, ast);
-console.log(printHighlightTree(hst));
+console.log("Partial s-expression:");
+console.log(printSexp(partialSexp(ast)));
+
+console.log("======================================================================");
+console.log("Full s-expression:");
+console.log(printSexp(fullSexp(code, ast)));
 
 console.log("======================================================================");
 console.log("HTML:");
-console.log(printHighlightHtml(hst));
+console.log(printHtml(fullSexp(code, ast)));
 

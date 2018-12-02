@@ -19,9 +19,42 @@ PARSING CODE:
       :prod prod}))
 ======================================================================
 AST:
-(program (defn (function_name (symbol)) (docstring (string)) (params (vector (symbol) (symbol))) (function_body (list (symbol) (vector (symbol) (list (symbol) (symbol) (symbol)) (symbol) (list (symbol) (symbol) (symbol))) (hash_map (keyword) (symbol) (keyword) (symbol))))))
+(program
+  (defn
+    (function_name (symbol))
+    (docstring (string))
+    (params (vector (symbol) (symbol)))
+    (function_body
+      (list
+        (symbol)
+        (vector
+          (symbol)
+          (list (symbol) (symbol) (symbol))
+          (symbol)
+          (list (symbol) (symbol) (symbol)))
+        (hash_map (keyword) (symbol) (keyword) (symbol))))))
 ======================================================================
-HST:
+Partial s-expression:
+[
+  "program",
+  [
+    "defn",
+    ["function_name"],
+    ["docstring", ["string"]],
+    ["params", ["vector"]],
+    [
+      "function_body",
+      [
+        "list",
+        ["vector", ["list"], ["list"]],
+        ["hash_map", ["keyword"], ["keyword"]]
+      ]
+    ]
+  ]
+]
+
+======================================================================
+Full s-expression:
 [
   "root",
   "\n",
@@ -29,82 +62,69 @@ HST:
     "program",
     [
       "defn",
-      ["(", "("],
-      ["defn", "defn"],
+      "(",
+      "defn",
       " ",
       ["function_name", ["symbol", "foo"]],
       "\n  ",
-      [
-        "docstring",
-        ["string", ["\"", "\""], "hello, this is a docstring", ["\"", "\""]]
-      ],
+      ["docstring", ["string", "\"", "hello, this is a docstring", "\""]],
       "\n  ",
-      [
-        "params",
-        [
-          "vector",
-          ["[", "["],
-          ["symbol", "a"],
-          " ",
-          ["symbol", "b"],
-          ["]", "]"]
-        ]
-      ],
+      ["params", ["vector", "[", ["symbol", "a"], " ", ["symbol", "b"], "]"]],
       "\n  ",
       [
         "function_body",
         [
           "list",
-          ["(", "("],
+          "(",
           ["symbol", "let"],
           " ",
           [
             "vector",
-            ["[", "["],
+            "[",
             ["symbol", "sum"],
             " ",
             [
               "list",
-              ["(", "("],
+              "(",
               ["symbol", "+"],
               " ",
               ["symbol", "a"],
               " ",
               ["symbol", "b"],
-              [")", ")"]
+              ")"
             ],
             "\n        ",
             ["symbol", "prod"],
             " ",
             [
               "list",
-              ["(", "("],
+              "(",
               ["symbol", "*"],
               " ",
               ["symbol", "a"],
               " ",
               ["symbol", "b"],
-              [")", ")"]
+              ")"
             ],
-            ["]", "]"]
+            "]"
           ],
           "\n     ",
           [
             "hash_map",
-            ["{", "{"],
-            ["keyword", [":", ":"], "sum"],
+            "{",
+            ["keyword", ":", "sum"],
             " ",
             ["symbol", "sum"],
             "\n      ",
-            ["keyword", [":", ":"], "prod"],
+            ["keyword", ":", "prod"],
             " ",
             ["symbol", "prod"],
-            ["}", "}"]
+            "}"
           ],
-          [")", ")"]
+          ")"
         ]
       ],
-      [")", ")"]
+      ")"
     ]
   ]
 ]

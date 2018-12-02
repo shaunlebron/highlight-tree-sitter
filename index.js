@@ -1,6 +1,17 @@
 const prettier = require('prettier');
 
-function highlightTree(code, ast) {
+function partialSexp(ast) {
+  function walk(node) {
+    if (node.children.length === 0) return; // omit zero-length nodes
+    return [
+      node.type,
+      ...node.children.map(walk).filter(x => x)
+    ];
+  }
+  return walk(ast.rootNode);
+}
+
+function fullSexp(code, ast) {
   let a = 0;
   function getText(b) {
     let text = code.slice(a, b);
@@ -8,40 +19,28 @@ function highlightTree(code, ast) {
     return text ? [text] : [];
   }
   function walk(node) {
-    return [
-      ...getText(node.startIndex),
-      [
-        node.type,
-        ...[].concat(...node.children.map(walk)),
-        ...getText(node.endIndex)
-      ]
-    ];
+    const preText = getText(node.startIndex);
+    const children = node.children.map(walk);
+    const text = getText(node.endIndex);
+    const isLeaf = children.length === 0 && node.type === text[0];
+    if (isLeaf) return [...preText, ...text];
+    return [...preText, [node.type, ...[].concat(...children), ...text]];
   }
   return ["root", ...walk(ast.rootNode), ...getText(code.length)];
 }
 
-function printHighlightTree(hst) {
-  const str = JSON.stringify(hst);
+function printSexp(sexp) {
+  const str = JSON.stringify(sexp);
   return prettier.format(str, {parser: "json"});
 }
 
-function printHighlightHtml(hst) {
-  let result = "";
-  function walk(node) {
-    if (typeof node === "string")
-      result += node;
-    else {
-      const [type, ...children] = node;
-      if (children[0] === type && children.length === 1) result += type;
-      else {
-        result += `<span class="${type}">`;
-        children.forEach(walk);
-        result += "</span>";
-      }
-    }
+function printHtml(sexp) {
+  function print(node) {
+    if (typeof node === "string") return node;
+    const [type, ...children] = node;
+    return `<span class="${type}">${children.map(print).join("")}</span>`;
   }
-  walk(hst);
-  return `<pre>${result}</pre>`;
+  return `<pre>${print(sexp)}</pre>`;
 }
 
-module.exports = { highlightTree, printHighlightTree, printHighlightHtml };
+module.exports = { partialSexp, fullSexp, printSexp, printHtml };
