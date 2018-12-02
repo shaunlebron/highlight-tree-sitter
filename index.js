@@ -21,11 +21,10 @@ function fullSexp(code, ast) {
     const preText = getText(node.startIndex);
     const children = node.children.map(walk);
     const text = getText(node.endIndex);
-    const isLeaf = children.length === 0 && node.type === text[0];
-    if (isLeaf) return [...preText, ...text];
-    return [...preText, [node.type, ...[].concat(...children), ...text]];
+    const name = node.isNamed ? node.type : "_anon";
+    return [...preText, [name, ...[].concat(...children), ...text]];
   }
-  return ["root", ...walk(ast.rootNode), ...getText(code.length)];
+  return ["_root", ...walk(ast.rootNode), ...getText(code.length)];
 }
 
 function printSexp(sexp) {
