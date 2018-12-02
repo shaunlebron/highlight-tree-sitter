@@ -1,25 +1,23 @@
 const prettier = require('prettier');
 
 function highlightTree(code, ast) {
-  const tags = [];
+  let a = 0;
+  function getText(b) {
+    let text = code.slice(a, b);
+    a = b;
+    return text ? [text] : [];
+  }
   function walk(node) {
-    const { type, startIndex, endIndex, children } = node;
-    tags.push({type, i: startIndex, isOpen: true});
-    children.forEach(walk);
-    tags.push({type, i: endIndex, isOpen: false});
+    return [
+      ...getText(node.startIndex),
+      [
+        node.type,
+        ...[].concat(...node.children.map(walk)),
+        ...getText(node.endIndex)
+      ]
+    ];
   }
-  walk(ast.rootNode);
-
-  let prevI = 0;
-  let sexp = `["root",`;
-  for (const { type, i, isOpen } of tags) {
-    const prevText = code.slice(prevI, i);
-    if (prevText) sexp += JSON.stringify(prevText) + ",";
-    sexp += (isOpen ? "[" + JSON.stringify(type) : "]") + ",";
-    prevI = i;
-  }
-  sexp += "]";
-  return eval(sexp);
+  return ["root", ...walk(ast.rootNode), ...getText(code.length)];
 }
 
 function printHighlightTree(hst) {
