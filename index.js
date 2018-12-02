@@ -35,8 +35,8 @@ function printSexp(sexp) {
 function printHtml(sexp) {
   function print(node) {
     if (typeof node === "string") return node;
-    const [type, ...children] = node;
-    return `<span class="${type}">${children.map(print).join("")}</span>`;
+    const [name, ...children] = node;
+    return `<span class="${name}">${children.map(print).join("")}</span>`;
   }
   return `<pre>${print(sexp)}</pre>`;
 }
