@@ -1,0 +1,15 @@
+{
+  "name": "highlight-tree-sitter",
+  "version": "1.0.0",
+  "description": "create a highlight syntax tree (hst) from tree-sitter grammar",
+  "main": "index.js",
+  "author": "Shaun Lebron",
+  "license": "ISC",
+  "dependencies": {
+    "prettier": "1.15.3"
+  },
+  "devDependencies": {
+    "tree-sitter": "^0.13.23",
+    "tree-sitter-clojure": "^0.2.0"
+  }
+}
