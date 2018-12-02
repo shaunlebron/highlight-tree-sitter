@@ -19,35 +19,29 @@ PARSING CODE:
       :prod prod}))
 ======================================================================
 AST:
-(program
-  (defn
-    (function_name (symbol))
-    (docstring (string))
-    (params (vector (symbol) (symbol)))
-    (function_body
-      (list
-        (symbol)
-        (vector
-          (symbol)
-          (list (symbol) (symbol) (symbol))
-          (symbol)
-          (list (symbol) (symbol) (symbol)))
-        (hash_map (keyword) (symbol) (keyword) (symbol))))))
+(program (defn (function_name (symbol)) (docstring (string)) (params (vector (symbol) (symbol))) (function_body (list (symbol) (vector (symbol) (list (symbol) (symbol) (symbol)) (symbol) (list (symbol) (symbol) (symbol))) (hash_map (keyword) (symbol) (keyword) (symbol))))))
 ======================================================================
 Partial s-expression:
 [
   "program",
   [
     "defn",
-    ["function_name"],
+    ["function_name", ["symbol"]],
     ["docstring", ["string"]],
-    ["params", ["vector"]],
+    ["params", ["vector", ["symbol"], ["symbol"]]],
     [
       "function_body",
       [
         "list",
-        ["vector", ["list"], ["list"]],
-        ["hash_map", ["keyword"], ["keyword"]]
+        ["symbol"],
+        [
+          "vector",
+          ["symbol"],
+          ["list", ["symbol"], ["symbol"], ["symbol"]],
+          ["symbol"],
+          ["list", ["symbol"], ["symbol"], ["symbol"]]
+        ],
+        ["hash_map", ["keyword"], ["symbol"], ["keyword"], ["symbol"]]
       ]
     ]
   ]

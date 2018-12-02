@@ -2,11 +2,10 @@ const prettier = require('prettier');
 
 function partialSexp(ast) {
   function walk(node) {
-    if (node.children.length === 0) return; // omit zero-length nodes
-    return [
+    return node.isNamed ? [
       node.type,
       ...node.children.map(walk).filter(x => x)
-    ];
+    ] : null;
   }
   return walk(ast.rootNode);
 }
