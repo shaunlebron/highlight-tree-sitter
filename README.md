@@ -1,10 +1,13 @@
+_work in progress_
+
 # Highlight Tree Sitter
 
-- **What**: Highlight syntax using proper [tree-sitter] grammars
+Create syntax-highlighted code (in HTML) from proper [tree-sitter] grammars.
+
 - **Why**: it's better since it doesn't use incorrect regex patterns
 - **How**: this adds helpers to the node.js bindings for tree-sitter
 
-[tree-sitter]:https://github.com/tree-sitter/tree-sitter
+_**TODO**: implement Atom's [scope mappings] to create classes from syntax node selections_
 
 ## Quick example
 
@@ -46,7 +49,13 @@ Full Tree:
         (_anon "}")))))
 ```
 
-Output html:
+Highlight Tree:
+
+<pre>
+TODO: transform from Full Tree using <a href="https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/#syntax-highlighting">scope mappings</a>
+</pre>
+
+Output html (using Full Tree for now):
 
 ```
 <pre><span class="_root">
@@ -80,3 +89,7 @@ The s-expression pretty-printer is compiled ClojureScript code.  To rebuild:
 ```
 npm run build
 ```
+
+[tree-sitter]:https://github.com/tree-sitter/tree-sitter
+[scope mappings]:https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/#syntax-highlighting
+
