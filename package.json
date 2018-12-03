@@ -6,7 +6,7 @@
   "author": "Shaun Lebron",
   "license": "ISC",
   "scripts": {
-    "build": "shadow-cljs compile printSexp"
+    "build": "shadow-cljs release printSexp"
   },
   "dependencies": {},
   "devDependencies": {

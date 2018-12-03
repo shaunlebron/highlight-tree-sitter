@@ -3,4 +3,5 @@
  :dependencies []
  :builds {:printSexp {:target :node-library
                       :output-to "printSexp.js"
+                      :prepend "// AUTO-GENERATED from src-cljs/"
                       :exports-fn print-sexp.core/exports}}}
