@@ -1,0 +1,6 @@
+;; shadow-cljs configuration
+{:source-paths ["src-cljs/"]
+ :dependencies []
+ :builds {:printSexp {:target :node-library
+                      :output-to "printSexp.js"
+                      :exports-fn print-sexp.core/exports}}}

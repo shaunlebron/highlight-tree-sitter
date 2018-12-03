@@ -1,5 +1,16 @@
-const prettier = require('prettier');
+// To create tree-sitter highlighted syntax,
+// we generate an s-expression tree for transforming to HTML.
 
+// An s-expression is a nested JS array:
+// Example:  ["name", ...nodes]
+// - "name": can be anything, represents the node type
+// - ...nodes: other nodes (or strings)
+
+
+// Get partial s-expression (for debugging):
+// (same as ast.rootNode.toString() but in data form)
+// - only named node types are shown
+// - (no text)
 function partialSexp(ast) {
   function walk(node) {
     return node.isNamed ? [
@@ -10,6 +21,11 @@ function partialSexp(ast) {
   return walk(ast.rootNode);
 }
 
+
+// Get full s-expression:
+// - _root = top level node to catch extra whitespace
+// - _anon = unnamed node
+// - (all text is shown as quoted forms)
 function fullSexp(code, ast) {
   let a = 0;
   function getText(b) {
@@ -27,11 +43,9 @@ function fullSexp(code, ast) {
   return ["_root", ...walk(ast.rootNode), ...getText(code.length)];
 }
 
-function printSexp(sexp) {
-  const str = JSON.stringify(sexp);
-  return prettier.format(str, {parser: "json"});
-}
 
+// Get HTML:
+// -  each node is wrapped in <span class="<name>"></span>
 function printHtml(sexp) {
   function print(node) {
     if (typeof node === "string") return node;
@@ -41,4 +55,5 @@ function printHtml(sexp) {
   return `<pre>${print(sexp)}</pre>`;
 }
 
-module.exports = { partialSexp, fullSexp, printSexp, printHtml };
+
+module.exports = { partialSexp, fullSexp, printHtml };

@@ -1,6 +1,9 @@
+// Demonstrate usage
+
 const Parser = require('tree-sitter');
 const Clojure = require('tree-sitter-clojure');
-const { partialSexp, fullSexp, printSexp, printHtml } = require('./index.js');
+const { partialSexp, fullSexp, printHtml } = require('./index.js');
+const { printSexp } = require('./printSexp.js');
 
 const parser = new Parser();
 parser.setLanguage(Clojure);
@@ -13,25 +16,35 @@ const code = `
         prod (* a b)]
      {:sum sum
       :prod prod}))`;
-
-console.log("======================================================================");
-console.log("PARSING CODE:");
-console.log(code);
-
-console.log("======================================================================");
-console.log("AST:");
 const ast = parser.parse(code);
-console.log(ast.rootNode.toString());
 
-console.log("======================================================================");
-console.log("Partial s-expression:");
-console.log(printSexp(partialSexp(ast)));
+console.log(`
+======================================================================
+Parsing code:
+======================================================================
+${code}
 
-console.log("======================================================================");
-console.log("Full s-expression:");
-console.log(printSexp(fullSexp(code, ast)));
+======================================================================
+Partial s-expression:
+- only named node types are shown
+- (no text)
+======================================================================
 
-console.log("======================================================================");
-console.log("HTML:");
-console.log(printHtml(fullSexp(code, ast)));
+${printSexp(partialSexp(ast))}
 
+======================================================================
+Full s-expression:
+- _root = top level node to catch extra whitespace
+- _anon = unnamed node
+- (all text is shown as quoted forms)
+======================================================================
+
+${printSexp(fullSexp(code, ast))}
+
+======================================================================
+HTML:
+-  each node is wrapped in <span class="<name>"></span>
+======================================================================
+
+${printHtml(fullSexp(code, ast))}
+`);
