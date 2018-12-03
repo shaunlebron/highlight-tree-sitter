@@ -16,7 +16,7 @@ function foo() {
 }
 ```
 
-Partial s-expression AST:
+Partial Tree:
 
 ```
 (program
@@ -26,7 +26,7 @@ Partial s-expression AST:
     (statement_block (return_statement (number)))))
 ```
 
-Full s-expression AST:
+Full Tree:
 
 ```
 (_root
@@ -57,10 +57,10 @@ Output html:
 
 ## API
 
-For the following signatures, `code` is source code string, `ast` is the output of tree-sitter parser on code, and `sexp` is nested array of strings and arrays.
+For the following signatures, `tree` is the output of tree-sitter parser on `text`, and `sexp` is nested array of strings and arrays (s-expressions).
 
-- `partialSexp(ast) => sexp` - create partial s-expression from AST (no text or unnamed nodes)
-- `fullSexp(code, ast) => sexp` - create full s-expression from code and AST (includes all text and nodes)
+- `partialSexp(tree) => sexp` - create partial s-expression from tree (no text or unnamed nodes)
+- `fullSexp(text, tree) => sexp` - create full s-expression from source text and tree
 - `printHtml(sexp) => str` - create html string to highlight a full s-expression (i.e. result of fullSexp)
 - `printSexp(sexp) => str` - pretty-print an s-expression
 

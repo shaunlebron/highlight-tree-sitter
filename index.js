@@ -10,17 +10,17 @@
 const { printSexp } = require("./printSexp.js");
 
 // Get partial s-expression (for debugging):
-// (same as ast.rootNode.toString() but in data form)
+// (same as tree.rootNode.toString() but in data form)
 // - only named node types are shown
 // - (no text)
-function partialSexp(ast) {
+function partialSexp(tree) {
   function walk(node) {
     return node.isNamed ? [
       node.type,
       ...node.children.map(walk).filter(x => x)
     ] : null;
   }
-  return walk(ast.rootNode);
+  return walk(tree.rootNode);
 }
 
 
@@ -28,12 +28,12 @@ function partialSexp(ast) {
 // - _root = top level node to catch extra whitespace
 // - _anon = unnamed node
 // - (all text is shown as quoted forms)
-function fullSexp(code, ast) {
+function fullSexp(text, tree) {
   let lastTextI = 0;
   function flushText(i) {
-    let text = code.slice(lastTextI, i);
+    let slice = text.slice(lastTextI, i);
     lastTextI = i;
-    return text ? [text] : [];
+    return slice ? [slice] : [];
   }
   function walk(node) {
     const preText = flushText(node.startIndex);
@@ -42,7 +42,7 @@ function fullSexp(code, ast) {
     const name = node.isNamed ? node.type : "_anon";
     return [...preText, [name, ...children, ...text]];
   }
-  return ["_root", ...walk(ast.rootNode), ...flushText(code.length)];
+  return ["_root", ...walk(tree.rootNode), ...flushText(text.length)];
 }
 
 

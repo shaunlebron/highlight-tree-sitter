@@ -7,11 +7,11 @@ const JavaScript = require('tree-sitter-javascript');
 const parser = new Parser();
 parser.setLanguage(JavaScript);
 
-const code = `
+const text = `
 function foo() {
   return 1;
 }`;
-const ast = parser.parse(code);
+const tree = parser.parse(text);
 
 // util to print the literal form of the s-expression
 // (js arrays instead of the prettier s-expressions)
@@ -21,39 +21,37 @@ const printArray = arr => prettier.format(JSON.stringify(arr), {parser:"json"});
 
 console.log(`
 ======================================================================
-Parsing code:
+Parsing text:
 ======================================================================
-${code}
+${text}
 
 ======================================================================
-Partial:
+Partial Tree:
 - only named node types are shown
 - (no text)
 ======================================================================
 
-S-EXPRESSION:
-${printSexp(partialSexp(ast))}
+${printSexp(partialSexp(tree))}
 
-ARRAY:
-${printArray(partialSexp(ast))}
+As array:
+${printArray(partialSexp(tree))}
 
 ======================================================================
-Full:
+Full Tree:
 - _root = top level node to catch extra whitespace
 - _anon = unnamed node
 - (all text is shown as quoted forms)
 ======================================================================
 
-S-EXPRESSION:
-${printSexp(fullSexp(code, ast))}
+${printSexp(fullSexp(text, tree))}
 
-ARRAY:
-${printArray(fullSexp(code, ast))}
+As array:
+${printArray(fullSexp(text, tree))}
 
 ======================================================================
 HTML:
 -  each node is wrapped in <span class="<name>"></span>
 ======================================================================
 
-${printHtml(fullSexp(code, ast))}
+${printHtml(fullSexp(text, tree))}
 `);
