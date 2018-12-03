@@ -6,6 +6,8 @@
 // - "name": can be anything, represents the node type
 // - ...nodes: other nodes (or strings)
 
+// s-expression pretty-printer for better visualizing our API output below
+const { printSexp } = require("./printSexp.js");
 
 // Get partial s-expression (for debugging):
 // (same as ast.rootNode.toString() but in data form)
@@ -56,4 +58,4 @@ function printHtml(sexp) {
 }
 
 
-module.exports = { partialSexp, fullSexp, printHtml };
+module.exports = { partialSexp, fullSexp, printSexp, printHtml };

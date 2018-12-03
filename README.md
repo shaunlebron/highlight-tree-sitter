@@ -1,123 +1,82 @@
 # Highlight Tree Sitter
 
-Create a Highlight Syntax Tree (HST) from text using a [tree-sitter] grammar.
+- **What**: Highlight syntax using proper [tree-sitter] grammars
+- **Why**: it's better since it doesn't use incorrect regex patterns
+- **How**: this adds helpers to the node.js bindings for tree-sitter
 
 [tree-sitter]:https://github.com/tree-sitter/tree-sitter
 
+## Quick example
+
+Code to parse (JavaScript):
+
 ```
-$ node demo.js
+function foo() {
+  return 1;
+}
+```
 
+Partial s-expression AST:
 
-======================================================================
-Parsing code:
-======================================================================
-
-(defn foo
-  "hello, this is a docstring"
-  [a b]
-  (let [sum (+ a b)
-        prod (* a b)]
-     {:sum sum
-      :prod prod}))
-
-======================================================================
-Partial s-expression:
-- only named node types are shown
-- (no text)
-======================================================================
-
+```
 (program
-  (defn
-    (function_name (symbol))
-    (docstring (string))
-    (params (vector (symbol) (symbol)))
-    (function_body
-      (list
-        (symbol)
-        (vector
-          (symbol)
-          (list (symbol) (symbol) (symbol))
-          (symbol)
-          (list (symbol) (symbol) (symbol)))
-        (hash_map (keyword) (symbol) (keyword) (symbol))))))
+  (function
+    (identifier)
+    (formal_parameters) 
+    (statement_block (return_statement (number)))))
+```
 
-======================================================================
-Full s-expression:
-- _root = top level node to catch extra whitespace
-- _anon = unnamed node
-- (all text is shown as quoted forms)
-======================================================================
+Full s-expression AST:
 
+```
 (_root
   "\n"
   (program
-    (defn
-      (_anon "(")
-      (_anon "defn")
+    (function
+      (_anon "function")
       " "
-      (function_name (symbol "foo"))
-      "\n  "
-      (docstring
-        (string (_anon "\"") "hello, this is a docstring" (_anon "\"")))
-      "\n  "
-      (params
-        (vector (_anon "[") (symbol "a") " " (symbol "b") (_anon "]")))
-      "\n  "
-      (function_body
-        (list
-          (_anon "(")
-          (symbol "let")
-          " "
-          (vector
-            (_anon "[")
-            (symbol "sum")
-            " "
-            (list
-              (_anon "(")
-              (symbol "+")
-              " "
-              (symbol "a")
-              " "
-              (symbol "b")
-              (_anon ")"))
-            "\n        "
-            (symbol "prod")
-            " "
-            (list
-              (_anon "(")
-              (symbol "*")
-              " "
-              (symbol "a")
-              " "
-              (symbol "b")
-              (_anon ")"))
-            (_anon "]"))
-          "\n     "
-          (hash_map
-            (_anon "{")
-            (keyword (_anon ":") "sum")
-            " "
-            (symbol "sum")
-            "\n      "
-            (keyword (_anon ":") "prod")
-            " " 
-            (symbol "prod") 
-            (_anon "}")) 
-          (_anon ")"))) 
-      (_anon ")"))))
+      (identifier "foo")
+      (formal_parameters (_anon "(") (_anon ")"))
+      " "
+      (statement_block
+        (_anon "{")
+        "\n  "
+        (return_statement (_anon "return") " " (number "1") (_anon ";"))
+        "\n" 
+        (_anon "}")))))
+```
 
-======================================================================
-HTML:
--  each node is wrapped in <span class="<name>"></span>
-======================================================================
+Output html:
 
+```
 <pre><span class="_root">
-<span class="program"><span class="defn"><span class="_anon">(</span><span class="_anon">defn</span> <span class="function_name"><span class="symbol">foo</span></span>
-  <span class="docstring"><span class="string"><span class="_anon">"</span>hello, this is a docstring<span class="_anon">"</span></span></span>
-  <span class="params"><span class="vector"><span class="_anon">[</span><span class="symbol">a</span> <span class="symbol">b</span><span class="_anon">]</span></span></span>
-  <span class="function_body"><span class="list"><span class="_anon">(</span><span class="symbol">let</span> <span class="vector"><span class="_anon">[</span><span class="symbol">sum</span> <span class="list"><span class="_anon">(</span><span class="symbol">+</span> <span class="symbol">a</span> <span class="symbol">b</span><span class="_anon">)</span></span>
-        <span class="symbol">prod</span> <span class="list"><span class="_anon">(</span><span class="symbol">*</span> <span class="symbol">a</span> <span class="symbol">b</span><span class="_anon">)</span></span><span class="_anon">]</span></span>
-     <span class="hash_map"><span class="_anon">{</span><span class="keyword"><span class="_anon">:</span>sum</span> <span class="symbol">sum</span>
-      <span class="keyword"><span class="_anon">:</span>prod</span> <span class="symbol">prod</span><span class="_anon">}</span></span><span class="_anon">)</span></span></span><span class="_anon">)</span></span></span></span></pre>
+<span class="program"><span class="function"><span class="_anon">function</span> <span class="identifier">foo</span><span class="formal_parameters"><span class="_anon">(</span><span class="_anon">)</span></span> <span class="statement_block"><span class="_anon">{</span>
+  <span class="return_statement"><span class="_anon">return</span> <span class="number">1</span><span class="_anon">;</span></span>
+<span class="_anon">}</span></span></span></span></span></pre>
+```
 
+## API
+
+For the following signatures, `code` is source code string, `ast` is the output of tree-sitter parser on code, and `sexp` is nested array of strings and arrays.
+
+- `partialSexp(ast) => sexp` - create partial s-expression from AST (no text or unnamed nodes)
+- `fullSexp(code, ast) => sexp` - create full s-expression from code and AST (includes all text and nodes)
+- `printHtml(sexp) => str` - create html string to highlight a full s-expression (i.e. result of fullSexp)
+- `printSexp(sexp) => str` - pretty-print an s-expression
+
+## Run the demo
+
+Run [demo.js](demo.js) to see the following example for highlighting JavaScript:
+
+```
+npm install
+node demo.js
+```
+
+## Dev
+
+The s-expression pretty-printer is compiled ClojureScript code.  To rebuild:
+
+```
+npm run build
 ```

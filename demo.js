@@ -1,22 +1,23 @@
 // Demonstrate usage
 
+const { partialSexp, fullSexp, printSexp, printHtml } = require('./index.js');
 const Parser = require('tree-sitter');
-const Clojure = require('tree-sitter-clojure');
-const { partialSexp, fullSexp, printHtml } = require('./index.js');
-const { printSexp } = require('./printSexp.js');
+const JavaScript = require('tree-sitter-javascript');
 
 const parser = new Parser();
-parser.setLanguage(Clojure);
+parser.setLanguage(JavaScript);
 
 const code = `
-(defn foo
-  "hello, this is a docstring"
-  [a b]
-  (let [sum (+ a b)
-        prod (* a b)]
-     {:sum sum
-      :prod prod}))`;
+function foo() {
+  return 1;
+}`;
 const ast = parser.parse(code);
+
+// util to print the literal form of the s-expression
+// (js arrays instead of the prettier s-expressions)
+const prettier = require('prettier');
+const printArray = arr => prettier.format(JSON.stringify(arr), {parser:"json"});
+
 
 console.log(`
 ======================================================================
@@ -25,20 +26,26 @@ Parsing code:
 ${code}
 
 ======================================================================
-Partial s-expression:
+Partial:
 - only named node types are shown
 - (no text)
 ======================================================================
 
+ARRAY:
+${printArray(partialSexp(ast))}
+S-EXPRESSION:
 ${printSexp(partialSexp(ast))}
 
 ======================================================================
-Full s-expression:
+Full:
 - _root = top level node to catch extra whitespace
 - _anon = unnamed node
 - (all text is shown as quoted forms)
 ======================================================================
 
+ARRAY:
+${printArray(fullSexp(code, ast))}
+S-EXPRESSION:
 ${printSexp(fullSexp(code, ast))}
 
 ======================================================================
