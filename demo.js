@@ -31,10 +31,11 @@ Partial:
 - (no text)
 ======================================================================
 
-ARRAY:
-${printArray(partialSexp(ast))}
 S-EXPRESSION:
 ${printSexp(partialSexp(ast))}
+
+ARRAY:
+${printArray(partialSexp(ast))}
 
 ======================================================================
 Full:
@@ -43,10 +44,11 @@ Full:
 - (all text is shown as quoted forms)
 ======================================================================
 
-ARRAY:
-${printArray(fullSexp(code, ast))}
 S-EXPRESSION:
 ${printSexp(fullSexp(code, ast))}
+
+ARRAY:
+${printArray(fullSexp(code, ast))}
 
 ======================================================================
 HTML:

@@ -29,20 +29,20 @@ function partialSexp(ast) {
 // - _anon = unnamed node
 // - (all text is shown as quoted forms)
 function fullSexp(code, ast) {
-  let a = 0;
-  function getText(b) {
-    let text = code.slice(a, b);
-    a = b;
+  let lastTextI = 0;
+  function flushText(i) {
+    let text = code.slice(lastTextI, i);
+    lastTextI = i;
     return text ? [text] : [];
   }
   function walk(node) {
-    const preText = getText(node.startIndex);
-    const children = node.children.map(walk);
-    const text = getText(node.endIndex);
+    const preText = flushText(node.startIndex);
+    const children = [].concat(...node.children.map(walk));
+    const text = flushText(node.endIndex);
     const name = node.isNamed ? node.type : "_anon";
-    return [...preText, [name, ...[].concat(...children), ...text]];
+    return [...preText, [name, ...children, ...text]];
   }
-  return ["_root", ...walk(ast.rootNode), ...getText(code.length)];
+  return ["_root", ...walk(ast.rootNode), ...flushText(code.length)];
 }
 
 
