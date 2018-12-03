@@ -8,9 +8,7 @@
   "scripts": {
     "build": "shadow-cljs compile printSexp"
   },
-  "dependencies": {
-    "prettier": "1.15.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "shadow-cljs": "^2.7.6",
     "tree-sitter": "^0.13.23",
