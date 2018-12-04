@@ -2,10 +2,12 @@
 
 const { partialSexp, fullSexp, renameSexp, flattenSexp, highlightSexp, printSexp } = require('./index.js');
 const Parser = require('tree-sitter');
-const JavaScript = require('tree-sitter-javascript');
+const Javascript = require('tree-sitter-javascript');
+const CSON = require('cson');
+const JavascriptGrammar = CSON.requireFile('./node_modules/language-javascript/grammars/tree-sitter-javascript.cson');
 
 const parser = new Parser();
-parser.setLanguage(JavaScript);
+parser.setLanguage(Javascript);
 
 const text = `
 function foo() {

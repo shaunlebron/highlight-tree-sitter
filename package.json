@@ -12,6 +12,8 @@
     "postcss-selector-parser": "^5.0.0-rc.4"
   },
   "devDependencies": {
+    "cson": "^5.1.0",
+    "language-javascript": "^0.128.0-0",
     "prepend-file-cli": "^1.0.6",
     "prettier": "^1.15.3",
     "shadow-cljs": "^2.7.6",
