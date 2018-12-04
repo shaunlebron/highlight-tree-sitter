@@ -45,6 +45,46 @@ function fullSexp(text, tree) {
   return ["_root", ...walk(tree.rootNode), ...flushText(text.length)];
 }
 
+function getNodeText(node) {
+  if (typeof node === "string") return node;
+  const [name, ...children] = node;
+  return children.map(getNodeText).join("");
+}
+
+function renameSexp(sexp, rename) {
+  function walk(node, path) {
+    if (typeof node === "string") return node;
+    const [name, ...children] = node;
+    const newName = rename(node, path);
+    let i=0;
+    const newChildren = children.map(child =>
+      typeof child === "string"
+        ? child
+        : walk(child, [...path, {i:i++, name:child[0]}]));
+    return [newName, ...newChildren];
+  }
+  return walk(sexp, []);
+}
+
+function flattenSexp(sexp, shouldFlatten) {
+  function walk(node) {
+    if (typeof node === "string") return node;
+    const [name, ...children] = node;
+    const newChildren = [].concat(...children.map(child => {
+      const flat = shouldFlatten(child);
+      const newChild = walk(child);
+      return flat ? newChild.slice(1) : [newChild];
+    }));
+    return [name, ...newChildren];
+  }
+  return walk(sexp);
+}
+
+function highlightSexp(sexp, getNodeClasses) {
+  sexp = renameSexp(sexp, (node,path) => [node[0], ...getNodeClasses(node, path)].join("."));
+  sexp = flattenSexp(sexp, node => node[0].includes("."));
+  return sexp;
+}
 
 // Get HTML:
 // -  each node is wrapped in <span class="<name>"></span>
