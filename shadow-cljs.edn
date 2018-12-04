@@ -2,5 +2,6 @@
 {:source-paths ["."]
  :dependencies []
  :builds {:print {:target :node-library
-                  :output-to "src/print"
+                  :output-to "src/print.js"
+                  :prepend "// AUTO-GENERATED from src/print.js\n"
                   :exports-fn src.print/exports}}}
