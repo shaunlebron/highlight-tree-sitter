@@ -49,19 +49,41 @@ Full Tree:
         (_anon "}")))))
 ```
 
-Highlight Tree:
+Highlight Tree (only highlighting _identifiers_):
 
 <pre>
-TODO: transform from Full Tree using <a href="https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/#syntax-highlighting">scope mappings</a>
+CLASSES APPENDED TO NODE NAMES:
+(_root
+  "\n"
+  (program
+    (function
+      (_anon "function")
+      " "
+      (identifier<strong>.syntax--identifier</strong> "foo")
+      (formal_parameters (_anon "(") (_anon ")"))
+      " "
+      (statement_block
+        (_anon "{")
+        "\n  "
+        (return_statement (_anon "return") " " (number "1") (_anon ";"))
+        "\n"
+        (_anon "}")))))
 </pre>
 
-Output html (using Full Tree for now):
+<pre>
+NODES WITHOUT CLASSES FLATTENED:
+(_root
+  "\nfunction "
+  (identifier<strong>.syntax--identifier</strong> "foo")
+  "() {\n  return 1;\n}")
+</pre>
+
+Output html:
 
 ```
-<pre><span class="_root">
-<span class="program"><span class="function"><span class="_anon">function</span> <span class="identifier">foo</span><span class="formal_parameters"><span class="_anon">(</span><span class="_anon">)</span></span> <span class="statement_block"><span class="_anon">{</span>
-  <span class="return_statement"><span class="_anon">return</span> <span class="number">1</span><span class="_anon">;</span></span>
-<span class="_anon">}</span></span></span></span></span></pre>
+function <span class="syntax--identifier">foo</span>() {
+  return 1;
+}
 ```
 
 ## API

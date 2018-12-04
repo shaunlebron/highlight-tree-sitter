@@ -1,4 +1,5 @@
-// AUTO-GENERATED from src-cljs/
+// AUTO-GENERATED from print.js
+// AUTO-GENERATED from printSexp.js
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         define([], factory);

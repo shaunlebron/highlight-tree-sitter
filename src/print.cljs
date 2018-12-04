@@ -1,9 +1,9 @@
 ;; Pretty-print a JS array as an s-expression.
+;; (for better visualizing our API output below)
 ;;
-;; (using ClojureScript's builtin pretty-printer,
-;;  with some processing to force two-space indentation)
+;; Uses ClojureScript's builtin pretty-printer, with some processing to force two-space indentation.
 
-(ns print-sexp.core
+(ns src.print
   (:require
     [clojure.string :refer [join split-lines replace-first]]
     [clojure.pprint :refer [pprint]]))

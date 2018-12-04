@@ -6,9 +6,11 @@
   "author": "Shaun Lebron",
   "license": "ISC",
   "scripts": {
-    "build": "shadow-cljs release printSexp && prepend printSexp.js '// AUTO-GENERATED from src-cljs/\n'"
+    "build": "shadow-cljs release print && prepend src/print.js '// AUTO-GENERATED from print.js\n'"
   },
-  "dependencies": {},
+  "dependencies": {
+    "postcss-selector-parser": "^5.0.0-rc.4"
+  },
   "devDependencies": {
     "prepend-file-cli": "^1.0.6",
     "prettier": "^1.15.3",

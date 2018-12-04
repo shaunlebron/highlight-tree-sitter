@@ -1,6 +1,6 @@
 // Demonstrate usage
 
-const { partialSexp, fullSexp, printSexp, printHtml } = require('./index.js');
+const { partialSexp, fullSexp, renameSexp, flattenSexp, highlightSexp, printSexp } = require('./index.js');
 const Parser = require('tree-sitter');
 const JavaScript = require('tree-sitter-javascript');
 
@@ -18,24 +18,26 @@ const tree = parser.parse(text);
 const prettier = require('prettier');
 const printArray = arr => prettier.format(JSON.stringify(arr), {parser:"json"});
 
-
 console.log(`
 ======================================================================
 Parsing text:
 ======================================================================
 ${text}
+`);
 
+const partial = partialSexp(tree);
+console.log(`
 ======================================================================
 Partial Tree:
 - only named node types are shown
 - (no text)
 ======================================================================
 
-${printSexp(partialSexp(tree))}
+${printSexp(partial)}
+`);
 
-As array:
-${printArray(partialSexp(tree))}
-
+const full = fullSexp(text, tree);
+console.log(`
 ======================================================================
 Full Tree:
 - _root = top level node to catch extra whitespace
@@ -43,15 +45,30 @@ Full Tree:
 - (all text is shown as quoted forms)
 ======================================================================
 
-${printSexp(fullSexp(text, tree))}
+${printSexp(full)}
+`);
 
-As array:
-${printArray(fullSexp(text, tree))}
+const highlight = highlightSexp(full, (node, path) => {
+  const [name] = node;
+  if (name === "identifier") return ["syntax--identifier"];
+  return [];
+});
 
+console.log(`
+======================================================================
+Highlighted Tree:
+======================================================================
+
+CLASSES APPENDED TO NODE NAMES:
+${printSexp(highlight.renamedSexp)}
+
+NODES WITHOUT CLASSES FLATTENED:
+${printSexp(highlight.sexp)}
+`);
+
+console.log(`
 ======================================================================
 HTML:
--  each node is wrapped in <span class="<name>"></span>
 ======================================================================
-
-${printHtml(fullSexp(text, tree))}
+${highlight.html}
 `);
