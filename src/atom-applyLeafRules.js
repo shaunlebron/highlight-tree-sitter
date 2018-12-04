@@ -23,4 +23,4 @@ const applyLeafRules = (rules, cursor) => {
   }
 }
 
-module.exports = { applyLeafRules };
+module.exports = applyLeafRules;
