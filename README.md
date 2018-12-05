@@ -1,20 +1,35 @@
 # Highlight Tree Sitter
 
-[Atom has a new syntax highlighter][scope mappings] using [tree-sitter] which works better than hacky regexes.
+Low-level helpers for using [node-tree-sitter] to syntax-highlight static code (e.g. outputting HTML).
 
-It is designed for editors, but this project uses it to:
+**Background**: [Atom uses tree-sitter][scope mappings] since it is a fast way
+to use proper grammars in an editor, removing the need for hacky regexes.
+Tree-sitter can also be used for more accurate syntax-highlighting of static
+code for displaying on web pages.  It can be frustrating to encounter corner
+cases when the grammar pukes and throws off the color of an entire file.
+
+## Features
+
+This is currently only a **low-level API** for accomplishing the following:
 
 - **generate HTML snippets** for syntax-highlighting static code
 - **pretty-print s-expressions** of syntax trees for learning
-- **provide a platform for analysis** so it can be used for generating other things, like:
+- **provide a platform for analysis** so it can be used for generating other things, like say:
     - wrapping recognized symbols in `<a href>` links for docs
     - outputting ansi-highlighted code for terminal, or other formats
 
-This is currently only a **low-level API** for accomplishing the above things.
+## Run the demo
+
+Run [demo.js](demo.js) to see the following example for highlighting JavaScript:
+
+```
+npm install
+node demo.js
+```
 
 ## Learn!
 
-_Code below is a walkthrough of what [demo.js](demo.js) does_
+_Code below is a walkthrough of what the above demo does_
 
 Suppose we have the following JavaScript code we want to highlight:
 
@@ -136,15 +151,6 @@ Highlighting:
 
 - `highlightSexpFromScopes(sexp, scopes) => { html, sexp }` - highlight using Atom [scope mappings]
 
-## Run the demo
-
-Run [demo.js](demo.js) to see the following example for highlighting JavaScript:
-
-```
-npm install
-node demo.js
-```
-
 ## Dev
 
 The s-expression pretty-printer is compiled ClojureScript code.  To rebuild:
@@ -154,5 +160,6 @@ npm run build
 ```
 
 [tree-sitter]:https://github.com/tree-sitter/tree-sitter
+[node-tree-sitter]:https://github.com/tree-sitter/node-tree-sitter
 [scope mappings]:https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/#syntax-highlighting
 [js-scopes]:https://github.com/atom/language-javascript/blob/v0.129.18/grammars/tree-sitter-javascript.cson#L58

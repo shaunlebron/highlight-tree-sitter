@@ -1,7 +1,7 @@
 {
   "name": "highlight-tree-sitter",
   "version": "1.0.0",
-  "description": "create a highlight syntax tree (hst) from tree-sitter grammar",
+  "description": "helpers for using tree-sitter for highlighting static code",
   "main": "index.js",
   "author": "Shaun Lebron",
   "license": "ISC",
