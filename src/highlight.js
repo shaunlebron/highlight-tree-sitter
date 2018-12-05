@@ -6,11 +6,13 @@ const applyLeafRules = require("./atom-applyLeafRules.js");
 function renameSexpWithCursor(sexp, rename) {
   function walk(node, nodeTypes, childIndices) {
     const [name, ...children] = node;
-    const newName = rename(node, nodeTypes, childIndices);
+    const newName = name === "_root" ? name : rename(node, nodeTypes, childIndices);
     let i = 0;
     const newChildren = children.map(child => {
       if (typeof child === "string") return child;
-      const newNodeTypes = [...nodeTypes, child[0]];
+      let childName = child[0];
+      if (childName === "_anon") childName = child[1];
+      const newNodeTypes = [...nodeTypes, childName];
       const newChildIndices = [...childIndices, i++];
       return walk(child, newNodeTypes, newChildIndices);
     });
@@ -46,11 +48,10 @@ function getNodeCursor(node) {
 function highlightSexpFromScopes(sexp, scopes) {
   const scopeMap = new SyntaxScopeMap(scopes);
   return highlightSexp(sexp, (node, nodeTypes, childIndices) => {
-    const rules = scopeMap.get(nodeTypes, childIndices);
+    const rules = scopeMap.get(nodeTypes, childIndices, node[0] !== "_anon");
     const cursor = getNodeCursor(node);
     const scopeName = applyLeafRules(rules, cursor);
-    if (!scopeName) return [];
-    return scopeName.split(".");
+    return scopeName ? scopeName.split(".") : [];
   });
 }
 
