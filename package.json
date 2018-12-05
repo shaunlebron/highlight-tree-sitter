@@ -3,10 +3,20 @@
   "version": "1.0.0",
   "description": "helpers for using tree-sitter for highlighting static code",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "src",
+    "README.md",
+    "CHANGES.md"
+  ],
   "author": "Shaun Lebron",
   "license": "ISC",
   "scripts": {
     "build": "shadow-cljs release print"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shaunlebron/highlight-tree-sitter"
   },
   "dependencies": {
     "postcss-selector-parser": "^5.0.0-rc.4"
