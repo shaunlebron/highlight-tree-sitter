@@ -2,7 +2,7 @@
 
 Low-level helpers for using [node-tree-sitter] to syntax-highlight static code (e.g. outputting HTML).
 
-**Background**: [Atom uses tree-sitter][scope mappings] since it is a fast way
+**Background**: [Atom uses tree-sitter][atom-tree-sitter] since it is a fast way
 to use proper grammars in an editor, removing the need for hacky regexes.
 Tree-sitter can also be used for more accurate syntax-highlighting of static
 code for displaying on web pages.  It can be frustrating to encounter corner
@@ -160,6 +160,7 @@ npm run build
 ```
 
 [tree-sitter]:https://github.com/tree-sitter/tree-sitter
+[atom-tree-sitter]:https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar
 [node-tree-sitter]:https://github.com/tree-sitter/node-tree-sitter
 [scope mappings]:https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/#syntax-highlighting
 [js-scopes]:https://github.com/atom/language-javascript/blob/v0.129.18/grammars/tree-sitter-javascript.cson#L58
