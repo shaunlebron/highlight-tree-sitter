@@ -1,15 +1,22 @@
-_work in progress_
-
 # Highlight Tree Sitter
 
-Create syntax-highlighted code (in HTML) from proper [tree-sitter] grammars.
+[Atom has a new syntax highlighter][scope mappings] using [tree-sitter] which works better than hacky regexes.
 
-- **Why**: it's better since it doesn't use incorrect regex patterns
-- **How**: this adds helpers to the node.js bindings for tree-sitter
+It is designed for editors, but this project uses it to:
 
-## Quick example
+- **generate HTML snippets** for syntax-highlighting static code
+- **pretty-print s-expressions** of syntax trees for learning
+- **provide a platform for analysis** so it can be used for generating other things, like:
+    - wrapping recognized symbols in `<a href>` links for docs
+    - outputting ansi-highlighted code for terminal, or other formats
 
-Code to parse (JavaScript):
+This is currently only a **low-level API** for accomplishing the above things.
+
+## Learn!
+
+_Code below is a walkthrough of what [demo.js](demo.js) does_
+
+Suppose we have the following JavaScript code we want to highlight:
 
 ```
 function foo() {
@@ -17,7 +24,13 @@ function foo() {
 }
 ```
 
-Partial Tree:
+**Partial Tree**: Passing it to `partialSexp` will create the partial tree seen
+below—not containing any actual source text, and only displaying what are
+called _named_ nodes, giving you an overview of the syntax tree.
+
+_NOTE: This s-expression format is what tree-sitter uses in its own test
+cases, but we provide a facility to represent it as arrays and to print it with
+proper formatting using `printSexp`, which is used in these examples)_
 
 ```
 (program
@@ -27,7 +40,9 @@ Partial Tree:
     (statement_block (return_statement (number)))))
 ```
 
-Full Tree:
+**Full Tree**: Passing it to `fullSexp` will instead create a full tree, with
+source text and whitespace with a root node `_root` capturing outer whitespace,
+and anonymous nodes `_anon` capturing what tree-sitter calls _unnamed nodes_.
 
 ```
 (_root
@@ -47,10 +62,12 @@ Full Tree:
         (_anon "}")))))
 ```
 
-Highlight Tree:
+**Annotated Tree**: Passing the full tree to `highlightSexp` with Atom's
+[javascript grammar scopes][js-scopes] (see [scope mappings]) produces the tree
+below.  Each syntax node is annotated with matching class names from the scope
+mappings:
 
 ```
-CLASSES APPENDED TO NODE NAMES:
 (_root
   "\n"
   (program.source.js
@@ -76,8 +93,10 @@ CLASSES APPENDED TO NODE NAMES:
           "}")))))
 ```
 
+**Highlight Tree**: Since we do not need any unannotated syntax nodes, we
+create a new tree with only the highlighted nodes, flattening all others:
+
 ```
-NODES WITHOUT CLASSES FLATTENED:
 (_root
   "\n"
   (program.source.js
@@ -96,7 +115,8 @@ NODES WITHOUT CLASSES FLATTENED:
     (_anon.punctuation.definition.function.body.end.bracket.curly "}")))
 ```
 
-Output html:
+**HTML output**: We can then directly map the highlight tree s-expressions to
+html span tags below:
 
 ```
 <span class="source js"><span class="storage type">function</span> <span class="entity name function">foo</span><span class="punctuation definition parameters begin bracket round">(</span><span class="punctuation definition parameters end bracket round">)</span> <span class="punctuation definition function body begin bracket curly">{</span>
@@ -135,4 +155,4 @@ npm run build
 
 [tree-sitter]:https://github.com/tree-sitter/tree-sitter
 [scope mappings]:https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/#syntax-highlighting
-
+[js-scopes]:https://github.com/atom/language-javascript/blob/v0.129.18/grammars/tree-sitter-javascript.cson#L58
