@@ -40,10 +40,4 @@ function fullSexp(text, tree) {
   return ["_root", ...walk(tree.rootNode), ...flushText(text.length)];
 }
 
-function getNodeText(node) {
-  if (typeof node === "string") return node;
-  const [name, ...children] = node;
-  return children.map(getNodeText).join("");
-}
-
 module.exports = { partialSexp, fullSexp };

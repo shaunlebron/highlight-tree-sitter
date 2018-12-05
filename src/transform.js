@@ -1,20 +1,6 @@
 // Transform s-expressions into something else.
 // (e.g. another s-expression or string)
 
-function renameSexp(sexp, rename) {
-  function walk(node, path) {
-    const [name, ...children] = node;
-    const newName = rename(node, path);
-    let i = 0;
-    const newChildren = children.map(child =>
-      typeof child === "string" ? child
-        : walk(child, [{ i: i++, name: child[0] }, ...path])
-    );
-    return [newName, ...newChildren];
-  }
-  return walk(sexp, []);
-}
-
 function mergeContiguousStrings(nodes) {
   const result = [];
   for (const node of nodes)
@@ -48,4 +34,4 @@ function stringifySexp(sexp, stringify) {
   return print(sexp);
 }
 
-module.exports = { renameSexp, flattenSexp, stringifySexp };
+module.exports = { flattenSexp, stringifySexp };

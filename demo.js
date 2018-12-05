@@ -1,6 +1,6 @@
 // Demonstrate usage
 
-const { partialSexp, fullSexp, renameSexp, flattenSexp, highlightSexp, printSexp } = require('./index.js');
+const { partialSexp, fullSexp, flattenSexp, highlightSexpFromScopes, printSexp } = require('./index.js');
 const Parser = require('tree-sitter');
 const Javascript = require('tree-sitter-javascript');
 const CSON = require('cson');
@@ -50,12 +50,7 @@ Full Tree:
 ${printSexp(full)}
 `);
 
-const highlight = highlightSexp(full, (node, path) => {
-  const [name] = node;
-  if (name === "identifier") return ["syntax--identifier"];
-  return [];
-});
-
+const highlight = highlightSexpFromScopes(full, JavascriptGrammar.scopes);
 console.log(`
 ======================================================================
 Highlighted Tree:
