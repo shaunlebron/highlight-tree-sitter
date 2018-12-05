@@ -3,5 +3,5 @@
  :dependencies []
  :builds {:print {:target :node-library
                   :output-to "src/print.js"
-                  :prepend "// AUTO-GENERATED from src/print.js\n"
+                  :prepend "// AUTO-GENERATED from src/print.cljs\n"
                   :exports-fn src.print/exports}}}

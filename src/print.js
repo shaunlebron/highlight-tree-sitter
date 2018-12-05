@@ -1,4 +1,4 @@
-// AUTO-GENERATED from src/print.js
+// AUTO-GENERATED from src/print.cljs
 (function(root, factory) {
   if (typeof define === "function" && define.amd) {
     define([], factory);
