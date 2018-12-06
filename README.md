@@ -15,7 +15,7 @@ A low-level API layer for [node-tree-sitter] to:
 **Tree-sitter is built for realtime parsing, why use it for static text?**
 Tree-sitter is built for syntax-highlighting, and its promise is to have better
 error-tolerance than other solutions.  If better grammars are developed for it,
-we should be able to them for highlighting text _outside_ of editors too.
+we should be able to use them for highlighting text _outside_ of editors too.
 
 ## Run the demo
 
