@@ -2,7 +2,7 @@
 
 A low-level API layer for [node-tree-sitter] to:
 
-- **generate HTML snippets** of syntax-highlighted source code
+- **generate HTML snippets** of syntax-highlighted source code, using [Atom's scope mappings format][scope mappings]
 - **pretty-print partial/full s-expressions** from tree-sitter syntax trees for readability/learning
 - **produce your own tree-sitter artifacts** by renaming/flattening tree-sitter nodes:
     - (e.g. terminal color output?, or turning recognized symbols into links? whatever you want 🙂)
