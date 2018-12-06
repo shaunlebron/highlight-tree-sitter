@@ -1,22 +1,21 @@
 # Highlight Tree Sitter
 
-Low-level helpers for using [node-tree-sitter] to syntax-highlight static code (e.g. outputting HTML).
+A low-level API layer for [node-tree-sitter] to:
 
-**Background**: [Atom uses tree-sitter][atom-tree-sitter] since it is a fast way
-to use proper grammars in an editor, removing the need for hacky regexes.
-Tree-sitter can also be used for more accurate syntax-highlighting of static
-code for displaying on web pages.  It can be frustrating to encounter corner
-cases when the grammar pukes and throws off the color of an entire file.
+- **generate HTML snippets** of syntax-highlighted source code
+- **pretty-print partial/full s-expressions** from tree-sitter syntax trees for readability/learning
+- **produce your own tree-sitter artifacts** by renaming/flattening tree-sitter nodes:
+    - (e.g. terminal color output?, or turning recognized symbols into links? whatever you want 🙂)
 
-## Features
+**Background**:
+- [Atom uses tree-sitter][atom-tree-sitter] for realtime, accurate syntax parsing—as an improvement over traditional [TextMate grammars].
+- GitHub diffs syntax trees created by tree-sitter for displaying [Pull Request toc's].
+- GitHub is *not* yet using tree-sitter for syntax-highlighting hosted repos ([source](https://github.com/github/linguist/issues/4342)).
 
-This is currently only a **low-level API** for accomplishing the following:
-
-- **generate HTML snippets** for syntax-highlighting static code
-- **pretty-print s-expressions** of syntax trees for learning
-- **provide a platform for analysis** so it can be used for generating other things, like say:
-    - wrapping recognized symbols in `<a href>` links for docs
-    - outputting ansi-highlighted code for terminal, or other formats
+**Tree-sitter is built for realtime parsing, why use it for static text?**
+Tree-sitter is built for syntax-highlighting, and its promise is to have better
+error-tolerance than other solutions.  If better grammars are developed for it,
+we should be able to them for highlighting text _outside_ of editors too.
 
 ## Run the demo
 
@@ -160,6 +159,8 @@ npm run build
 ```
 
 [tree-sitter]:https://github.com/tree-sitter/tree-sitter
+[textmate grammars]:https://macromates.com/manual/en/language_grammars
+[pull request toc's]:https://youtu.be/Jes3bD6P0To?t=1077
 [atom-tree-sitter]:https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar
 [node-tree-sitter]:https://github.com/tree-sitter/node-tree-sitter
 [scope mappings]:https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/#syntax-highlighting
